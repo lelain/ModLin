@@ -11,6 +11,7 @@ attach(data)
 N=length(data)
 
 #pour 1 variable
+
 res=matrix(data=rep(0,N),nrow=N,ncol=N)
 for (i in 1:(N-1))
 {
@@ -48,6 +49,8 @@ for (i in 1:N)
   compte=c()
 }
 
+#attention quand on supprime, parce que si par exemple X1 est bien explique par 
+#X2 + X3 il faut pas supprimer X2 ou X3 ensuite !
 redondant=unique(which(res>0.97,arr.ind=T)[,3])
 redondant
 
@@ -57,7 +60,7 @@ length(data2)
 
 #pour liaison entre 3 variables
 N=length(data2)
-N=6
+N
 res=array(data=rep(0,N),dim=c(N,N,N,N))
 
 J=1:(N-1)
@@ -86,14 +89,16 @@ for (i in 1:N)
         res[j,k,l,i] = summary(modele)$r.squared   #ou r ajuste??
       }
     }
+    compte_l=compte_k
   }
   compte_k=c()
   compte_l=c()
 }
 
-redondant=unique(which(res>0.97,arr.ind=T)[,3])
+which(res>0.97,arr.ind=T)
+redondant=unique(which(res>0.97,arr.ind=T)[,4])
 redondant
 
-data2=data1[,-redondant]
-length(data2)
+data3=data2[,-redondant]
+length(data3)
 

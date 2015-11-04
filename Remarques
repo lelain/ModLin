@@ -1,3 +1,12 @@
 ### Projet modèle linéaire ###
 
+- partie I : élimination des variables liées
 
+ → sur quel modèle linéaire se base t-on, avec où sans beta0? 
+X_i = beta0 + beta1*X_j    ou    X_i = beta1*X_j 
+
+ → quand on souhaite éliminer des variables pour modèle du genre X_i = beta0 + beta1*X_j + beta2*X_k. Si on élimine X_i il faut veiller à bien garder X_j et X_k. Pareil quand on teste les modèles du genre X_i = beta0 + beta1*X_j + beta2*X_k + beta3*X_l
+
+ → où et comment prendre en compte (ou éliminer) les observations aberrantes? comment les identifier? déjà voir ça : http://fr.wikihow.com/calculer-des-donn%C3%A9es-aberrantes
+ou ça https://en.wikipedia.org/wiki/Outlier
+peut-être déjà essayer de classer par ordre croissant les observations et de voir quelles observations sont à l'extrême, répéter pour les différents descripteurs, voir si toujours les mêmes obs ou pas
