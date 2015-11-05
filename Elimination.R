@@ -6,6 +6,10 @@ data<-read.table("FW_groupe5.csv",sep=";",dec=",",header=TRUE,row.names=1)
 attach(data)
 N=length(data)
 
+#pour visualiser l'effet de colinearite
+pairs(data[,(1:7)])  #on voit deja sur le graphe une forte colinearite entre X2 et X4, X2 et X7, X4 et X7
+
+
 #pour 1 variable
 res=matrix(data=rep(0,N),nrow=N,ncol=N)
 for (i in 1:(N-1))
