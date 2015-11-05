@@ -13,12 +13,15 @@ for (i in 1:(N-1))
   for (j in (i+1):N)
   {
     modele = lm(data[[i]] ~ data[[j]], data=data)
-    res[i,j] = summary(modele)$r.squared
+    res[j,i] = summary(modele)$r.squared
   }
 }
 
-redondant=unique(which(res>0.95,arr.ind=T)[,2])
-redondant
+which(res>0.96,arr.ind=T)
+#d'apres les resultats, on peut supprimer :
+redondant=c(2,4,7,12,21,23,37)
+aEnlever = names(data)[redondant]
+aEnlever
 data1=data[,-redondant] #on enleve les descripteurs lies
 length(data1)
 
@@ -37,7 +40,7 @@ for (i in 1:N)
     for (k in K[-compte])
     {
       modele = lm(data1[[i]] ~ data1[[j]]+data1[[k]], data=data1)
-      res[i,j,k] = summary(modele)$r.squared   
+      res[j,k,i] = summary(modele)$r.squared   
     }
   }
   compte=c()
@@ -45,10 +48,13 @@ for (i in 1:N)
 
 #attention quand on supprime, parce que si par exemple X1 est bien explique par 
 #X2 + X3 il faut pas supprimer X2 ou X3 ensuite !
-which(res>0.95,arr.ind=T)
-redondant=unique(which(res>0.95,arr.ind=T)[,3])    #a revoir
+which(res>0.97,arr.ind=T)
+#au vu des resultats, il semble que l'on puisse supprimer les valeurs suivantes :
+#j'ai changer, a voir : X_7, X_23, X_37, X_39
+redondant=c(7,23,37,39) #a voir
 redondant
-
+aEnlever = c(aEnlever , names(data1)[redondant])
+aEnlever
 data2=data1[,-redondant]
 length(data2)
 
@@ -77,11 +83,10 @@ for (i in 1:N)
     for (k in K[-compte_k])
     {
       compte_l=c(compte_l,k)
-      print(L[-compte_l])   #pb ici, compte_l a revoir
       for (l in L[-compte_l])
       {
         modele = lm(data2[[i]] ~ data2[[j]]+data2[[k]]+data2[[l]], data=data2)
-        res[j,k,l,i] = summary(modele)$r.squared   #ou r ajuste??
+        res[j,k,l,i] = summary(modele)$r.squared   
       }
     }
     compte_l=compte_k
@@ -90,10 +95,12 @@ for (i in 1:N)
   compte_l=c()
 }
 
-which(res>0.97,arr.ind=T)
-redondant=unique(which(res>0.97,arr.ind=T)[,4])
+which(res>0.982,arr.ind=T)
+#d'apres les resultats, on peut supprimer :
+redondant=c(2,14,21,30)  #a voir
 redondant
-
+aEnlever = c(aEnlever , names(data2)[redondant])
+aEnlever
 data3=data2[,-redondant]
 length(data3)
 
