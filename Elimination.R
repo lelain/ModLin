@@ -21,11 +21,10 @@ for (i in 1:(N-1))
   }
 }
 
-which(res>0.96,arr.ind=T)
+which(res>0.95,arr.ind=T)
 #d'apres les resultats, on peut supprimer :
-redondant=c(2,4,7,12,21,23,37)
-aEnlever = names(data)[redondant]
-aEnlever
+redondant=c(2,4,7,12,21,23,37,38)
+aGarder = names(data)[-redondant]   #pour stepwise
 data1=data[,-redondant] #on enleve les descripteurs lies
 length(data1)
 
@@ -52,13 +51,11 @@ for (i in 1:N)
 
 #attention quand on supprime, parce que si par exemple X1 est bien explique par 
 #X2 + X3 il faut pas supprimer X2 ou X3 ensuite !
-which(res>0.97,arr.ind=T)
+which(res>0.969,arr.ind=T)
 #au vu des resultats, il semble que l'on puisse supprimer les valeurs suivantes :
-#j'ai changer, a voir : X_7, X_23, X_37, X_39
-redondant=c(7,23,37,39) #a voir
+redondant=c(12,14,30,34,36) #a voir
 redondant
-aEnlever = c(aEnlever , names(data1)[redondant])
-aEnlever
+aGarder = c(aGarder , names(data1)[-redondant])
 data2=data1[,-redondant]
 length(data2)
 
@@ -103,8 +100,7 @@ which(res>0.982,arr.ind=T)
 #d'apres les resultats, on peut supprimer :
 redondant=c(2,14,21,30)  #a voir
 redondant
-aEnlever = c(aEnlever , names(data2)[redondant])
-aEnlever
+aGarder = c(aGarder , names(data2)[-redondant])
 data3=data2[,-redondant]
 length(data3)
 
