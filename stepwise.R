@@ -25,7 +25,7 @@ data2=subset(donnees,select=aGarder)
 
 #ensuite prendre 70% de l'echantillon pour faire la calibration (si pas assez on en prendra plus ou cross validation)
 #sur les 30% restant pour la validation du modele. 
-row_val=sample(1:25,7)   #on garde 7 lignes pour la validation
+row_val=sample(1:25,5)   #on garde 7 lignes pour la validation
 X_v=data2[row_val,]   #X_v, v pour validation
 X_c=data2[-row_val,]  #X_c, c pour calibration
 
@@ -49,7 +49,7 @@ Res_ind=which(res==min(res[res>0]),arr.ind=T)
 Res_ind
 #On garde les colonnes qu'il faut
 names(subset(X_c,select=Res_ind))
-modele=lm(reponse~descripteur34*descripteur66*descripteur71,data=X_c)
+modele=lm(reponse~descripteur1*descripteur14*descripteur71,data=donnees)
 modele_final=step(modele,direction="both")
 summary(modele_final)
 
@@ -59,5 +59,7 @@ plot(result)
 points(X_v[[1]],col=2)
 
 #erreur sur l'echantillon test
+result-X_v$reponse
+mean(abs(result-X_v$reponse))
 erreur=mean((result-X_v$reponse)**2)
 erreur

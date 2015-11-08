@@ -2,13 +2,12 @@
 
 - partie I : élimination des variables liées
 
- → sur quel modèle linéaire se base t-on, avec où sans beta0? 
-X_i = beta0 + beta1*X_j    ou    X_i = beta1*X_j 
-D'après ce que je lis, avec le beta0 ok
-
- → quand on souhaite éliminer des variables pour modèle du genre X_i = beta0 + beta1*X_j + beta2*X_k. Si on élimine X_i il faut veiller à bien garder X_j et X_k. Pareil quand on teste les modèles du genre X_i = beta0 + beta1*X_j + beta2*X_k + beta3*X_l
-
-→ R² ou R² ajusté? a priori R² ok, R² ajusté pour comparer des modèles avec nombre de facteurs différents
-
  → où et comment prendre en compte (ou éliminer) les observations aberrantes? comment les identifier? voir : http://eric.univ-lyon2.fr/~ricco/cours/cours/La_regression_dans_la_pratique.pdf
-Tout y ait : traitement valeurs aberrantes, sélection des descripteurs, etc.
+L'élimination des valeurs abérantes se ferait en premier alors?
+
+- partie II : sélection du modèle
+
+→ comment définir l'erreur de prédiction? mean(abs(prediction-observation)) ?
+
+→ en prenant des ensembles différents pour la calibration et validation, les résultats sont complètement différents... 
+ 
