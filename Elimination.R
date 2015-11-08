@@ -24,7 +24,6 @@ for (i in 1:(N-1))
 which(res>0.95,arr.ind=T)
 #d'apres les resultats, on peut supprimer :
 redondant=c(2,4,7,12,21,23,37,38)
-aGarder = names(data)[-redondant]   #pour stepwise
 data1=data[,-redondant] #on enleve les descripteurs lies
 length(data1)
 
@@ -55,7 +54,6 @@ which(res>0.969,arr.ind=T)
 #au vu des resultats, il semble que l'on puisse supprimer les valeurs suivantes :
 redondant=c(12,14,30,34,36) #a voir
 redondant
-aGarder = c(aGarder , names(data1)[-redondant])
 data2=data1[,-redondant]
 length(data2)
 
@@ -96,11 +94,14 @@ for (i in 1:N)
   compte_l=c()
 }
 
-which(res>0.982,arr.ind=T)
+which(res>0.980,arr.ind=T)
 #d'apres les resultats, on peut supprimer :
-redondant=c(2,14,21,30)  #a voir
+redondant=c(15,19,20,34,37)  
 redondant
-aGarder = c(aGarder , names(data2)[-redondant])
 data3=data2[,-redondant]
 length(data3)
+
+#resultat
+aGarder=names(data2)[-redondant]
+
 

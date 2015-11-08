@@ -13,7 +13,14 @@ donnees<-read.table("FW_groupe5_obs.csv",sep=";",dec=",",header=TRUE,row.names=1
 attach(donnees)
 N=length(donnees)
 
-#On garde les bonnes colonnes 
+#On garde les bonnes colonnes
+aGarder = c("reponse","descripteur1","descripteur3","descripteur8","descripteur10","descripteur13",
+            "descripteur14","descripteur15","descripteur16","descripteur21","descripteur22",
+            "descripteur23","descripteur28","descripteur34","descripteur38","descripteur39",
+            "descripteur41","descripteur43","descripteur44","descripteur45","descripteur46",
+            "descripteur47","descripteur48","descripteur49","descripteur50","descripteur51",
+            "descripteur59","descripteur60","descripteur63","descripteur65","descripteur66",
+            "descripteur71","descripteur73")
 data2=subset(donnees,select=aGarder)
 
 #ensuite prendre 70% de l'echantillon pour faire la calibration (si pas assez on en prendra plus ou cross validation)
@@ -24,34 +31,33 @@ X_c=data2[-row_val,]  #X_c, c pour calibration
 
 N=length(X_c)
 res=array(data=rep(0,N),dim=c(N,N,N))
-J=1:(N-1)
-K=1:N
-compte=c()
-for (i in 1:N)
+for (i in 2:(N-2))
 {
-  compte=c(compte,i)
-  for (j in J[-i])
+  for (j in (i+1):(N-1))
   {
-    compte=c(compte,j)
-    for (k in K[-compte])
+    for (k in (j+1):N)
     {
       modele = lm(X_c[[1]] ~ X_c[[i]]*X_c[[j]]*X_c[[k]], data=X_c)
       selection=step(modele,direction="both")
       res[i,j,k] = PRESS(selection)   
     }
   }
-  compte=c()
 }
 
 #resultats :
 Res_ind=which(res==min(res[res>0]),arr.ind=T)
-modele=lm(X_c[[1]]~X_c[[Res_ind[1]]]*X_c[[Res_ind[2]]]*X_c[[Res_ind[3]]],data=X_c)
+Res_ind
+#On garde les colonnes qu'il faut
+names(subset(X_c,select=Res_ind))
+modele=lm(reponse~descripteur34*descripteur66*descripteur71,data=X_c)
 modele_final=step(modele,direction="both")
+summary(modele_final)
 
 #Test sur l'echantillon de validation
-#On garde les colonnes qu'il faut
-X_v=X_v[Res_ind]
-Predict = modele_final$coef[1] + modele_final$coef[2]*X_v[[1]] + 
-  modele_final$coef[2]*X_v[[2]] + modele_final$coef[3]*X_v[[3]] + 
-  modele_final$coef[2]*X_c[[1]] modele_final$coef[2]*X_c[[1]]
+result=predict(modele_final,newdata=X_v)
+plot(result)
+points(X_v[[1]],col=2)
 
+#erreur sur l'echantillon test
+erreur=mean((result-X_v$reponse)**2)
+erreur
