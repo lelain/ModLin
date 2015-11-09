@@ -2,12 +2,8 @@
 #Ici on travaille sur le fichier FW_groupe5_obs
 #D'abord supprimer de ce fichier les colonnes qu'on a selectionner dans Elimination
 
-# definition de la fonction PRESS
-PRESS <- function(model) {
-  pr <- residuals(model)/(1-lm.influence(model)$hat)
-  PRESS <- sum(pr^2)
-  return(PRESS)
-}
+#pour la cross validation
+library(DAAG)
 
 donnees<-read.table("FW_groupe5_obs.csv",sep=";",dec=",",header=TRUE,row.names=1) 
 attach(donnees)
@@ -23,13 +19,8 @@ aGarder = c("reponse","descripteur1","descripteur3","descripteur8","descripteur1
             "descripteur71","descripteur73")
 data2=subset(donnees,select=aGarder)
 
-#ensuite prendre 70% de l'echantillon pour faire la calibration (si pas assez on en prendra plus ou cross validation)
-#sur les 30% restant pour la validation du modele. 
-row_val=sample(1:25,5)   #on garde 7 lignes pour la validation
-X_v=data2[row_val,]   #X_v, v pour validation
-X_c=data2[-row_val,]  #X_c, c pour calibration
-
-N=length(X_c)
+N=length(data2)
+N=5
 res=array(data=rep(0,N),dim=c(N,N,N))
 for (i in 2:(N-2))
 {
@@ -37,12 +28,27 @@ for (i in 2:(N-2))
   {
     for (k in (j+1):N)
     {
-      modele = lm(X_c[[1]] ~ X_c[[i]]*X_c[[j]]*X_c[[k]], data=X_c)
+      #pb de noms, il faudrait lui donner les vrais nom : descripteuri, etc. a voir avec la fonction factor()
+      modele = lm(names(data2[1]) ~ names(data2[i])*names(data2[j])*names(data2[k]), data=data2)
       selection=step(modele,direction="both")
-      res[i,j,k] = PRESS(selection)   
+      CrossVal=CVlm(data=data2,m=25,form.lm=selection)
+      #res[i,j,k] = attr(CrossVal,"ms")   
     }
   }
 }
+str(data2)
+
+modele=lm(factor(names(data2[1]))~factor(names(data2[2]))*factor(names(data2[3])),data=donnees2)
+is.factor(reponse)
+resDAAG <- CVlm(data=donnees,m=25,form.lm=modele)
+attr(resDAAG,"ms")
+donnees2=donnees[-9,]
+donnees3=donnees[9,]
+modele=lm(reponse~descripteur1*descripteur14,data=donnees2)
+modele1=lm(reponse~descripteur1*descripteur14,data=donnees)
+predict(modele,newdata=donnees3)
+predict(modele,newdata=donnees3)
+PRESS(modele)
 
 #resultats :
 Res_ind=which(res==min(res[res>0]),arr.ind=T)
