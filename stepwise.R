@@ -2,12 +2,15 @@
 #Ici on travaille sur le fichier FW_groupe5_obs
 #D'abord supprimer de ce fichier les colonnes qu'on a selectionner dans Elimination
 
-# definition de la fonction PRESS
+# definition de la fonction PRESS, sans doute inutile, peut-être fausse
 PRESS <- function(model) {
   pr <- residuals(model)/(1-lm.influence(model)$hat)
   PRESS <- sum(pr^2)
   return(PRESS)
 }
+
+#pour le problème des noms dans lm, step et VClm, faire choses de ce style :
+lm(as.formula(paste(names(x[1])," ~ ", names(x[2]))),data=x)
 
 donnees<-read.table("FW_groupe5_obs.csv",sep=";",dec=",",header=TRUE,row.names=1) 
 attach(donnees)
