@@ -11,6 +11,10 @@ PRESS <- function(model) {
 
 #pour le problème des noms dans lm, step et VClm, faire choses de ce style :
 lm(as.formula(paste(names(x[1])," ~ ", names(x[2]))),data=x)
+#mieux :
+nom = c(names(x[2]),names(x[3]),names(x[4]))
+formu = as.formula(paste("reponse ~ ",paste(nom,collapse = "*")))
+lm(formu,data=x)
 
 donnees<-read.table("FW_groupe5_obs.csv",sep=";",dec=",",header=TRUE,row.names=1) 
 attach(donnees)
