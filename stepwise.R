@@ -8,7 +8,12 @@ library(DAAG)
 donnees<-read.table("FW_groupe5_obs.csv",sep=";",dec=",",header=TRUE,row.names=1) 
 attach(donnees)
 N=length(donnees)
-
+donnees2=subset(donnees,select=c(1,2,3))
+## Create a formula for a model with a large number of variables:
+xnam <- paste0("x", 1:25)
+(fmla <- as.formula(paste("y ~ ", paste(xnam, collapse= "+"))))
+modele=lm(reponse~.,data=donnees2)
+summary(modele)
 #On garde les bonnes colonnes
 aGarder = c("reponse","descripteur1","descripteur3","descripteur8","descripteur10","descripteur13",
             "descripteur14","descripteur15","descripteur16","descripteur21","descripteur22",
