@@ -31,7 +31,7 @@ for (i in 2:(N-2))
       formule = as.formula(paste("reponse ~ ",paste(nom,collapse = "*")))
       modele=lm(formule,data=donnees2)
       modele_sel=step(modele,direction="both")
-      CrossVal=CVlm(data=donnees2,m=25,form.lm=modele_sel,plotit="Observed",printit=FALSE)
+      CrossVal=CVlm(data=donnees2,m=25,form.lm=modele_sel,printit=F)
       res[i,j,k] = attr(CrossVal,"ms")   
     }
   }
@@ -40,66 +40,10 @@ for (i in 2:(N-2))
 #resultats :
 Res_ind=which(res==min(res[res>0]),arr.ind=T)
 Res_ind=c(2,14,32) #resultat : 2,14,32
-#On garde les colonnes qu'il faut
+
 names(subset(donnees2,select=Res_ind))
 modele=lm(reponse~descripteur1*descripteur34*descripteur71,data=donnees2)
 modele_final=step(modele,direction="both")
-CrossVal=CVlm(data=donnees2,m=25,form.lm=modele_final,plotit="Observed",printit=T)
+CrossVal=CVlm(data=donnees2,m=25,form.lm=modele_final,printit=T)
 summary(modele_final)
 
-#pour sous ensembles a 2 variables
-N=length(donnees2)
-res=array(data=rep(0,N),dim=c(N,N))
-for (i in 2:(N-1))
-{
-  for (j in (i+1):N)
-  {
-    nom = c(names(donnees2[i]),names(donnees2[j]))
-    formule = as.formula(paste("reponse ~ ",paste(nom,collapse = "*")))
-    modele=lm(formule,data=donnees2)
-    modele_sel=step(modele,direction="both")
-    CrossVal=CVlm(data=donnees2,m=25,form.lm=modele_sel,plotit="Observed",printit=FALSE)
-    res[i,j] = attr(CrossVal,"ms")   
-  }
-}
-#resultats :
-Res_ind=which(res==min(res[res>0]),arr.ind=T)
-Res_ind   #resultat : 2,7
-#On garde les colonnes qu'il faut
-names(subset(donnees2,select=Res_ind))
-modele=lm(reponse~descripteur1*descripteur14,data=donnees2)
-modele_final=step(modele,direction="both")
-CrossVal=CVlm(data=donnees2,m=25,form.lm=modele_final,plotit="Observed",printit=T)
-summary(modele_final)
-
-#pour sous ensembles a 4 variables
-N=length(donnees2)
-res=array(data=rep(0,N),dim=c(N,N,N,N))
-for (i in 2:(N-3))
-{
-  for (j in (i+1):(N-2))
-  {
-    for (k in (j+1):(N-1))
-    {
-      for (l in (k+1):N)
-      {
-        nom = c(names(donnees2[i]),names(donnees2[j]),names(donnees2[k]),names(donnees2[l]))
-        formule = as.formula(paste("reponse ~ ",paste(nom,collapse = "*")))
-        modele=lm(formule,data=donnees2)
-        modele_sel=step(modele,direction="both")
-        CrossVal=CVlm(data=donnees2,m=25,form.lm=modele_sel,plotit="Observed",printit=FALSE)
-        res[i,j,k,l] = attr(CrossVal,"ms")  
-      }
-    } 
-  }
-}
-
-#resultats :
-Res_ind=which(res==min(res[res>0]),arr.ind=T)
-Res_ind    #resultat : 
-#On garde les colonnes qu'il faut
-names(subset(donnees2,select=Res_ind))
-modele=lm(reponse~descripteur1*descripteur34*descripteur71,data=donnees2)
-modele_final=step(modele,direction="both")
-CrossVal=CVlm(data=donnees2,m=25,form.lm=modele_final,plotit="Observed",printit=T)
-summary(modele_final)
