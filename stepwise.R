@@ -47,3 +47,12 @@ modele_final=step(modele,direction="both")
 CrossVal=CVlm(data=donnees2,m=25,form.lm=modele_final,printit=T)
 summary(modele_final)
 
+#graphe des reponses et des valeurs predites par le modele
+prediction = predict(modele_final,data=donnees2[,c(2,14,32)])
+plot(prediction,col="red",pch=4,xlab="numéro de la molécule",ylab="reponse")
+points(reponse)
+legend("topleft",legend=c("reponses observees","valeurs predites"),col=c(1,"red"),pch=c(1,4))
+
+erreur=prediction - donnees2$reponse
+mean(abs(erreur))   #resultat : 1.38
+
