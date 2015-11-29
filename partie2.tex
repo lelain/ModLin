@@ -1,0 +1,32 @@
+% !TeX root = CR.tex
+
+\chapter {Régression \emph{stepwise}}
+
+\section{Démarche}
+
+Dans la partie précédente nous sommes parvenus à éliminer un certain nombre de régresseurs redondants. Il nous est à présent possible en un temps raisonnable de tester le pouvoir prédictif de différents modèles. 
+
+L'objectif est d'obtenir un modèle final limité à 4 ou 5 descripteurs qui peuvent être de degré un avec éventuellement des termes d'intéraction. Il faut parvenir à un modèle parcimonieux conduisant à des prévisions fiables. 
+Dans cet objectif, on ne peut ici choisir le $R^2$ pour critère de sélection de modèles. Ce critère ne peut en effet être appliqué qu'à des modèles possédant le même nombre de variables.
+L'idée est ainsi de calculer le PRESS pour tous les modèles possibles formés de 2,3 ou 4 descripteurs. Il sera alors permis de conclure que le modèle le meilleur est celui présentant le PRESS le plus faible. 
+
+Cependant, lorsque l'on prend un modèle à 4 descripteurs, cela représente en fait, avec les intéractions, un modèle à 15 variables. C'est trop. Il va donc falloir, pour un modèle donné, réaliser une sélection de variables. Pour cela, nous allons utiliser le critère AIC et la méthode \emph{stepwise}.
+
+\section{Critère AIC et algorythme \emph{stepwise}}
+
+Contrairement au $R^2$ qui, par sa définition, augmente dès qu'on ajoute des variables au modèle, le critère AIC permet de comparer des modèles ayant un nombre de paramètres différents. Pour ce faire, il met en balance la précision du modèle (maximum de vraisemblance) et sa complexité (nombre de paramètres). Il est définit par :
+\[AIC = -2 \ln{(L)} + 2(p +1)\]
+où $L$ est le maximum de vraisemblance du modèle et $p$ est le nombre de paramètres du modèle.
+
+Ce critère pénalisera donc les modèles ayant un grand nombre de paramètres et limitera les effets de sur-ajustement qui en découlent. 
+
+Quant à l'algorythme \emph{stepwise}, il débute avec le modèle complet, élimine un terme si le modèle sans celui-ci possède un AIC plus faible que le modèle complet. L'algorythme se poursuit avec en plus la possibilité de rajouter dans le modèle sélectionné une variable déjà éliminée qui redeviendrait informative (pour le critère AIC).  
+Notons que dans le cas de modèles avec intéractions, l'algorythme s'assure que les termes d'intéractions ne soient plus dans le modèle avant de tester les termes sans intéraction. 
+
+%Il faut aussi signaler que dans le cas d'échantillons de petite taille (c'est notre cas), la littérature sur le sujet préconise l'utilisation de l'AICc, définit par :
+%\[ AICc = AIC + \frac{2p(p + 1)}{n - p - 1} \]
+%où n désigne la taille de l'échantillon.
+
+
+
+

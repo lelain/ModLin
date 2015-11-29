@@ -9,5 +9,13 @@ L'élimination des valeurs abérantes se ferait en premier alors?
 
 → comment définir l'erreur de prédiction? mean(abs(prediction-observation)) ?
 
-→ en prenant des ensembles différents pour la calibration et validation, les résultats sont complètement différents... 
+
+
+
+- plan compte-rendu partie II :
+Intro, explication du pb et démarche
+critère AIC et stepwise
+PRESS et cross-validation
+Application (code en annexe) et analyse des résultats : graphe des réponses et valeurs prédites, erreur de prédiction
+
  
