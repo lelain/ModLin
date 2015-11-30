@@ -6,11 +6,11 @@
 
 Dans la partie précédente nous sommes parvenus à éliminer un certain nombre de régresseurs redondants. Il nous est à présent possible en un temps raisonnable de tester le pouvoir prédictif de différents modèles. 
 
-L'objectif est d'obtenir un modèle final limité à 4 ou 5 descripteurs qui peuvent être de degré un avec éventuellement des termes d'intéraction. Il faut parvenir à un modèle parcimonieux conduisant à des prévisions fiables. 
-Dans cet objectif, on ne peut ici choisir le $R^2$ pour critère de sélection de modèles. Ce critère ne peut en effet être appliqué qu'à des modèles possédant le même nombre de variables.
-L'idée est ainsi de calculer le PRESS pour tous les modèles possibles formés de 2,3 ou 4 descripteurs. Il sera alors permis de conclure que le modèle le meilleur est celui présentant le PRESS le plus faible. 
+On rappelle que l'objectif est d'obtenir un modèle final limité à 4 ou 5 descripteurs qui peuvent être de degré un avec éventuellement des termes d'intéraction : il faut parvenir à un modèle parcimonieux conduisant à des prévisions fiables. 
+Dans cet objectif, il n'est pas raisonnable d'utiliser le $R^2$ pour critère de sélection de modèles. Ce critère ne peut en effet être appliqué qu'à des modèles possédant le même nombre de variables.
+L'idée est plutôt de calculer le PRESS pour tous les modèles possibles, il sera alors permis de conclure que le modèle le meilleur est celui présentant le PRESS le plus faible. En fait, on se limitera aux modèles formés de 3 descripteurs. En effet, un modèle à 2 descripteurs (avec l'intéraction, cela fait 3 variables) semble léger. Au contraire, quand on passe à 4 descripteurs, cela représente avec les termes d'intéractions 15 variables, cela risque d'être trop.
 
-Cependant, lorsque l'on prend un modèle à 4 descripteurs, cela représente en fait, avec les intéractions, un modèle à 15 variables. C'est trop. Il va donc falloir, pour un modèle donné, réaliser une sélection de variables. Pour cela, nous allons utiliser le critère AIC et la méthode \emph{stepwise}.
+Cependant, lorsque l'on prend un modèle à 3 descripteurs, cela représente en fait, avec les intéractions, un modèle à 7 variables. C'est un peu trop. Il va donc falloir, pour un modèle donné, réaliser une sélection de variables. Pour cela, nous allons utiliser le critère AIC et la méthode \emph{stepwise}.
 
 \section{Critère AIC et algorythme \emph{stepwise}}
 
@@ -26,6 +26,18 @@ Notons que dans le cas de modèles avec intéractions, l'algorythme s'assure que
 %Il faut aussi signaler que dans le cas d'échantillons de petite taille (c'est notre cas), la littérature sur le sujet préconise l'utilisation de l'AICc, définit par :
 %\[ AICc = AIC + \frac{2p(p + 1)}{n - p - 1} \]
 %où n désigne la taille de l'échantillon.
+
+\section{PRESS et \emph{cross-validation}}
+
+Pour un modèle donné, nous sommes donc capable de faire une sélection de variables. Reste à évaluer la qualité du modèle en question. 
+
+C'est le PRESS
+
+Le  PRESS  de  Allen  est  l’introduction  historique  de  la  validation  croisée
+ou leave one out (loo). On désigne par bY(i) la prévision de Yi calculée sans
+tenir compte de la ième observation (Yi;X1i;:::;Xpi), la somme des erreurs
+quadratiques de prévision (PRESS) est définie par1nnXi=1hyi
+
 
 
 

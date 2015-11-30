@@ -16,7 +16,7 @@ aGarder = c("reponse","descripteur1","descripteur3","descripteur8","descripteur1
             "descripteur47","descripteur48","descripteur49","descripteur50","descripteur51",
             "descripteur59","descripteur60","descripteur63","descripteur65","descripteur66",
             "descripteur71","descripteur73")
-donnees2=subset(donnees,select=aGarder)
+donnees2=subset(donnees,select=c("reponse",aGarder))
 
 #le press minimum pour tous les sous-ensembles a 3 variables
 N=length(donnees2)
@@ -39,20 +39,19 @@ for (i in 2:(N-2))
 
 #resultats :
 Res_ind=which(res==min(res[res>0]),arr.ind=T)
-Res_ind=c(2,14,32) #resultat : 2,14,32
+Res_ind     #10,13,28. En gardant d'autres : 2,14,32, c'est a dire les descripteurs 1,34,71
 
 names(subset(donnees2,select=Res_ind))
-modele=lm(reponse~descripteur1*descripteur34*descripteur71,data=donnees2)
+modele=lm(reponse~descripteur16*descripteur26*descripteur60,data=donnees)
 modele_final=step(modele,direction="both")
-CrossVal=CVlm(data=donnees2,m=25,form.lm=modele_final,printit=T)
+CrossVal=CVlm(data=donnees,m=25,form.lm=modele_final,printit=T)
 summary(modele_final)
 
 #graphe des reponses et des valeurs predites par le modele
-prediction = predict(modele_final,data=donnees2[,c(2,14,32)])
+prediction = predict(modele_final,data=donnees2[,Res_ind])
 plot(prediction,col="red",pch=4,xlab="numéro de la molécule",ylab="reponse")
 points(reponse)
 legend("topleft",legend=c("reponses observees","valeurs predites"),col=c(1,"red"),pch=c(1,4))
 
-erreur=prediction - donnees2$reponse
+erreur=prediction-donnees$reponse
 mean(abs(erreur))   #resultat : 1.38
-

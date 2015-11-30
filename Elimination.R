@@ -23,7 +23,7 @@ for (i in 1:(N-1))
 
 which(res>0.95,arr.ind=T)
 #d'apres les resultats, on peut supprimer :
-redondant=c(2,4,7,12,21,23,37,38)
+redondant=c(4,7,16,22,23,36,44,47)   #c(2,4,7,12,21,23,37,38)
 data1=data[,-redondant] #on enleve les descripteurs lies
 length(data1)
 
@@ -52,7 +52,7 @@ for (i in 1:N)
 #X2 + X3 il faut pas supprimer X2 ou X3 ensuite !
 which(res>0.969,arr.ind=T)
 #au vu des resultats, il semble que l'on puisse supprimer les valeurs suivantes :
-redondant=c(12,14,30,34,36) #a voir
+redondant=c(2,11,32,37,39) #c(12,14,30,34,36)
 redondant
 data2=data1[,-redondant]
 length(data2)
@@ -94,9 +94,9 @@ for (i in 1:N)
   compte_l=c()
 }
 
-which(res>0.980,arr.ind=T)
+which(res>0.970,arr.ind=T)
 #d'apres les resultats, on peut supprimer :
-redondant=c(15,19,20,34,37)  
+redondant=c(9,13,20,21,25,33)  #c(15,19,20,34,37)  
 redondant
 data3=data2[,-redondant]
 length(data3)
