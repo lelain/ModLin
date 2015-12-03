@@ -12,4 +12,7 @@ CR.pdf
 CR.synctex.gz
 CR.toc
 partie2.log
+*.RData
+annexe.R
+plot1.png
 

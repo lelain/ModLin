@@ -19,3 +19,4 @@ PRESS et cross-validation
 Application (code en annexe) et analyse des résultats : graphe des réponses et valeurs prédites, erreur de prédiction
 
  
+En faisant la régression avec toutes les variables c'est les descripteurs 1, 33 et 71 qui forment le meilleur modèle.

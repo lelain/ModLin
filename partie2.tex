@@ -1,6 +1,6 @@
 % !TeX root = CR.tex
 
-\chapter {Régression \emph{stepwise}}
+\chapter {Régression \emph{stepwise} et validation}
 
 \section{Démarche}
 
@@ -14,9 +14,9 @@ Cependant, lorsque l'on prend un modèle à 3 descripteurs, cela représente en 
 
 \section{Critère AIC et algorythme \emph{stepwise}}
 
-Contrairement au $R^2$ qui, par sa définition, augmente dès qu'on ajoute des variables au modèle, le critère AIC permet de comparer des modèles ayant un nombre de paramètres différents. Pour ce faire, il met en balance la précision du modèle (maximum de vraisemblance) et sa complexité (nombre de paramètres). Il est définit par :
+Contrairement au $R^2$ qui, de par sa définition, augmente dès qu'on ajoute des variables au modèle, le critère AIC permet de comparer des modèles ayant un nombre de paramètres différents. Pour ce faire, il met en balance la précision du modèle (maximum de vraisemblance) et sa complexité (nombre de paramètres). Il est définit par :
 \[AIC = -2 \ln{(L)} + 2(p +1)\]
-où $L$ est le maximum de vraisemblance du modèle et $p$ est le nombre de paramètres du modèle.
+où $L$ est le maximum de vraisemblance du modèle et $p$ le nombre de paramètres du modèle.
 
 Ce critère pénalisera donc les modèles ayant un grand nombre de paramètres et limitera les effets de sur-ajustement qui en découlent. 
 
@@ -27,16 +27,56 @@ Notons que dans le cas de modèles avec intéractions, l'algorythme s'assure que
 %\[ AICc = AIC + \frac{2p(p + 1)}{n - p - 1} \]
 %où n désigne la taille de l'échantillon.
 
+\verb|R| fournit la fonction \verb|step| pour la sélection de modèle basée sur l'AIC. Nous l'utiliserons de la manière suivante : 
+\begin{center}
+\verb|step(modele,direction="both")|
+\end{center}
+où \verb|model| est le modèle à tester, le paramètre \verb|both| permet de réaliser la sélection par l'algorythme \emph{stepwise}. 
+
+
 \section{PRESS et \emph{cross-validation}}
 
-Pour un modèle donné, nous sommes donc capable de faire une sélection de variables. Reste à évaluer la qualité du modèle en question. 
+Pour un modèle donné, nous sommes donc capable de faire une sélection de variables. Reste à évaluer la qualité du modèle en question. Ceci implique une procédure de validation. 
 
-C'est le PRESS
+Comme nous n'avons que 25 observations, nous allons réaliser une \emph{leave-one-out cross-validation}. Elle consiste à utiliser une seule observation $i$ pour former l'ensemble de validation et les 24 autres observations comme ensemble d'apprentissage. On calcule alors le carré des erreurs, définit par :   
+\[ss_i=(y_i-\hat{y_i})^2\]
+où $\hat{y_i}$ est la prévision de $y_i$ calculée sans tenir compte de la $i$-ème observation.
+En réalisant cette opération pour chacune des $n$ observations (25 dans notre cas), on peut alors avoir une moyenne empirique des $ss_i$ :
+\[ms = \frac{1}{n} PRESS = \frac{1}{n}\sum_{i=1}^{n}{ss_i}\]
 
-Le  PRESS  de  Allen  est  l’introduction  historique  de  la  validation  croisée
-ou leave one out (loo). On désigne par bY(i) la prévision de Yi calculée sans
-tenir compte de la ième observation (Yi;X1i;:::;Xpi), la somme des erreurs
-quadratiques de prévision (PRESS) est définie par1nnXi=1hyi
+Sous \verb|R|, c'est la fonction \verb|CVlm| du \emph{package} DAAG qui permet de réaliser ce que l'on vient de décrire. On l'utilisera sous la forme 
+\begin{center}
+\verb|CVlm(data = nosDonnees, form.lm = modele, m = 25)|
+\end{center}
+où \verb|data| attend le tableau de données, \verb|form.lm| le modèle que l'on souhaite tester et \verb|m| est le nombre de \emph{folds} que l'on souhaite réaliser.
+Pour une \emph{leave-one-out cross-validation} cela revient à prendre \verb|m=n|. L'attribut \verb|ms| permet de récupérer la valeur qui nous intéresse.    
+
+On voit alors qu'en passant en revue l'ensemble des modèles qui nous intéressent, on peut conclure que le meilleur modèle est celui présentant un $ms$ le plus faible.
+
+
+\section{Application et analyse des résultats}
+
+Nous avons à présent tout ce qu'il faut. Le code est présenté en annexe \ref{CV}. Il renvoie le résultat suivant : le modèle formé des descripteurs 1, 33 et 71 est le meilleur au vu du critère présenté ci-dessus. 
+
+Pour avoir un apreçu de la validité du modèle, on peut comparer graphiquement les valeurs qu'il prédit et les réponses réellement observées.
+
+ \begin{figure}[!ht]
+	\centering
+     	\includegraphics[scale=0.42]{plot1.png}
+
+	\caption{Les valeurs prédites par notre modèle semblent le plus souvent assez bonnes}
+\end{figure}
+
+On peut aussi quantifier l'erreur de prédiction : on observe une erreur maximum de 4.36 et une moyenne de 1.21. C'est bien sous le seuil de 1.5 que l'on s'était fixé.
+ 
+\begin{appendix}
+ \chapter{Validation}
+ \label{CV}
+ On présente ici le code \verb|R| utilisé pour l'obtention du modèle final. On suppose que le vecteur \verb|aGarder| est connue de \verb|R| et contient les variables que l'on souhaite garder après l'élimination réalisée dans la première partie. 
+ 
+ \lstset{language=Scilab, frame=single, xrightmargin =0cm , xleftmargin =0 cm}
+  \lstinputlisting[firstline=1, lastline=55]{./annexe.R}
+  \end{appendix}
 
 
 

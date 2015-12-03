@@ -5,8 +5,8 @@
 library(DAAG)
 
 #lit les donnees
-donnees<-read.table("FW_groupe5_obs.csv",sep=";",dec=",",header=TRUE,row.names=1) 
-attach(donnees)
+donnees2<-read.table("FW_groupe5_obs.csv",sep=";",dec=",",header=TRUE,row.names=1) 
+attach(donnees2)
 
 #On garde les bonnes colonnes
 aGarder = c("reponse","descripteur1","descripteur3","descripteur8","descripteur10","descripteur13",
@@ -38,13 +38,18 @@ for (i in 2:(N-2))
 }
 
 #resultats :
+Tab_ind=which((res > 0) & (res < 6),arr.ind=T) 
+Tab_ind[1,]
+sum(Tab_ind==42)
+
 Res_ind=which(res==min(res[res>0]),arr.ind=T)
 Res_ind     #10,13,28. En gardant d'autres : 2,14,32, c'est a dire les descripteurs 1,34,71
 
 names(subset(donnees2,select=Res_ind))
-modele=lm(reponse~descripteur16*descripteur26*descripteur60,data=donnees)
+names(subset(donnees2,select=Tab_ind[1,]))
+modele=lm(reponse~descripteur1*descripteur28*descripteur30,data=donnees2)
 modele_final=step(modele,direction="both")
-CrossVal=CVlm(data=donnees,m=25,form.lm=modele_final,printit=T)
+CrossVal=CVlm(data=donnees2,m=25,form.lm=modele_final,printit=T)
 summary(modele_final)
 
 #graphe des reponses et des valeurs predites par le modele
@@ -53,5 +58,7 @@ plot(prediction,col="red",pch=4,xlab="numéro de la molécule",ylab="reponse")
 points(reponse)
 legend("topleft",legend=c("reponses observees","valeurs predites"),col=c(1,"red"),pch=c(1,4))
 
-erreur=prediction-donnees$reponse
+erreur=prediction-donnees2$reponse
 mean(abs(erreur))   #resultat : 1.38
+
+
